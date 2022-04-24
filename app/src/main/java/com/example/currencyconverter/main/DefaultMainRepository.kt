@@ -12,18 +12,13 @@ class DefaultMainRepository @Inject constructor(
 
     override suspend fun getRatesViaRepository(base: String): Resource<CurrencyResponseModel> {
         return try {
-            Log.d("deneme", "getRatesViaRepository - base $base")
-            Log.d("deneme", "getRatesViaRepository - api $api")
-            val response = api.getRatesFromRemote(base)
-            Log.d("deneme", "getRatesViaRepository - response $response")
+
+            val response = api.getRatesFromRemote(base, "7a4261b8b4c990d8b892dc51bc29072e")
             val result = response.body()
-            Log.d("deneme", "getRatesViaRepository - result $result")
 
             if (response.isSuccessful && result != null){
-                Log.d("deneme", "response.isSuccessful")
                 Resource.Success(result)
             }else {
-                Log.d("deneme", "response.isNOTSuccessful")
                 Resource.Error(response.message())
             }
         } catch (e: Exception){

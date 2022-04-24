@@ -37,31 +37,24 @@ class MainViewModel @Inject constructor(
         toCurrency: String
     ) {
         val fromAmount = amountStr.toFloatOrNull()
-        Log.d("deneme", "convert 1 fromAmount :  $fromAmount")
         if (fromAmount == null){
-            Log.d("deneme", "convert 2 fromAmount :  $fromAmount")
             _conversion.value = CurrencyEvent.Failure("not a valid amount")
             return
         }
 
         viewModelScope.launch(dispatchers.io) {
-            Log.d("deneme", "convert 22")
             _conversion.value = CurrencyEvent.Loading
             when(val ratesResponse = repository.getRatesViaRepository(fromCurrency)) {
                 is Resource.Error -> {
-                    Log.d("deneme", "convert 4")
                     _conversion.value = CurrencyEvent.Failure(ratesResponse.message!!)
                 }
                 is Resource.Success -> {
-                    Log.d("deneme", "convert 3")
                     val rates = ratesResponse.data!!.rates
                     val rate = getRateForCurrency(toCurrency, rates)
-                    Log.d("deneme", "rate $rate")
                     if (rate == null){
                         _conversion.value = CurrencyEvent.Failure("unexpected error")
                     } else {
                         val convertedCurrency = round(fromAmount * rate * 100) / 100
-                        Log.d("deneme", "convertedCurrency $convertedCurrency")
                         _conversion.value = CurrencyEvent.Success(
                             "$fromAmount $fromCurrency = $convertedCurrency $toCurrency"
                         )
@@ -72,38 +65,38 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getRateForCurrency(currency: String, rates: Rates) = when (currency) {
-        "CAD" -> rates.CAD
-        "HKD" -> rates.HKD
-        "ISK" -> rates.ISK
-        "EUR" -> rates.EUR
-        "PHP" -> rates.PHP
-        "DKK" -> rates.DKK
-        "HUF" -> rates.HUF
-        "CZK" -> rates.CZK
-        "AUD" -> rates.AUD
-        "RON" -> rates.RON
-        "SEK" -> rates.SEK
-        "IDR" -> rates.IDR
-        "INR" -> rates.INR
-        "BRL" -> rates.BRL
-        "RUB" -> rates.RUB
-        "HRK" -> rates.HRK
-        "JPY" -> rates.JPY
-        "THB" -> rates.THB
-        "CHF" -> rates.CHF
-        "SGD" -> rates.SGD
-        "PLN" -> rates.PLN
-        "BGN" -> rates.BGN
-        "CNY" -> rates.CNY
-        "NOK" -> rates.NOK
-        "NZD" -> rates.NZD
-        "ZAR" -> rates.ZAR
-        "USD" -> rates.USD
-        "MXN" -> rates.MXN
-        "ILS" -> rates.ILS
-        "GBP" -> rates.GBP
-        "KRW" -> rates.KRW
-        "MYR" -> rates.MYR
+        "CAD" -> rates.cAD
+        "HKD" -> rates.hKD
+        "ISK" -> rates.iSK
+        "EUR" -> rates.eUR
+        "PHP" -> rates.pHP
+        "DKK" -> rates.dKK
+        "HUF" -> rates.hUF
+        "CZK" -> rates.cZK
+        "AUD" -> rates.aUD
+        "RON" -> rates.rON
+        "SEK" -> rates.sEK
+        "IDR" -> rates.iDR
+        "INR" -> rates.iNR
+        "BRL" -> rates.bRL
+        "RUB" -> rates.rUB
+        "HRK" -> rates.hRK
+        "JPY" -> rates.jPY
+        "THB" -> rates.tHB
+        "CHF" -> rates.cHF
+        "SGD" -> rates.sGD
+        "PLN" -> rates.pLN
+        "BGN" -> rates.bGN
+        "CNY" -> rates.cNY
+        "NOK" -> rates.nOK
+        "NZD" -> rates.nZD
+        "ZAR" -> rates.zAR
+        "USD" -> rates.uSD
+        "MXN" -> rates.mXN
+        "ILS" -> rates.iLS
+        "GBP" -> rates.gBP
+        "KRW" -> rates.kRW
+        "MYR" -> rates.mYR
         else -> null
     }
 
